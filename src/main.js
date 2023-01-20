@@ -3,6 +3,8 @@ import { Register } from "./components/Register.js"
 import { Login } from "./components/Login.js"
 import { Profile } from "./components/Profile.js"
 
+import { registerFirebase, loginFirebase } from "./firebase/auth.js"
+
 const root = document.querySelector("#root")
 
 const routes = {
@@ -18,7 +20,6 @@ export const onNavigate = (pathname) => {
     pathname, 
     window.location.origin + pathname
   )
-  console.log(routes[pathname])
   root.innerHTML = routes[pathname]()
   selectBtns()
 }
@@ -33,22 +34,45 @@ function selectBtns(){
 
   if(registerBtn){
     registerBtn.addEventListener('click', ()=>{
-      console.log('registro')
       onNavigate('/register')
+      registerUser()
     });  
   }
 
   if(loginBtn){
     loginBtn.addEventListener('click', ()=>{
-      console.log('login')
       onNavigate('/login')
+      registerUser()
     });  
   }
 
   if(returnBtn){
     returnBtn.addEventListener('click', ()=>{
-      console.log('regresar')
       onNavigate('/')
     })
   }
+}
+
+function registerUser(){
+  const form = document.querySelector("#form");
+  const errorDiv = document.querySelector("#error")
+
+  form.addEventListener('submit', async (event)=>{
+    event.preventDefault();
+    const email = event.target[0].value;
+    const password = event.target[1].value;
+
+    const result = await registerFirebase(email, password)
+
+    if(result === 'Firebase: Error (auth/email-already-in-use).'){
+      errorDiv.innerText = 'Correo ya existe';
+    }else if(result === 'Firebase: Password should be at least 6 characters (auth/weak-password).'){
+      errorDiv.innerText = 'La clave debe tener al menos 6 caracteres';
+    }else if(result === 'Firebase: Error (auth/internal-error).'){
+      errorDiv.innerText = 'Por favor llena todos los campos';
+    }else{
+      errorDiv.innerText = 'correo creado exitosamente';
+    }
+
+  })
 }
