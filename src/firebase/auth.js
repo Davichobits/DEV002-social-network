@@ -2,15 +2,15 @@ import { signInWithEmailAndPassword, createUserWithEmailAndPassword, auth } from
 
 export const loginFirebase = async (email, password) => {
   try {
-    await signInWithEmailAndPassword(auth, email, password);
+    return await signInWithEmailAndPassword(auth, email, password);
   } catch (error) {
-    throw error.message;
+    return error.message;
   }
 };
 
 export const registerFirebase = async (email, password) => {
   try {
-    await createUserWithEmailAndPassword(auth, email, password);
+    return await createUserWithEmailAndPassword(auth, email, password);
   } catch (error) {
     return error.message;
   }
