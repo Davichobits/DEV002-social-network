@@ -1,11 +1,10 @@
-export const Login = () => {
-  return (
+export const Login = () => (
   `<h1>Ingresa aquí:</h1>
   <form id="form" action="">
     <input type="email" placeholder="correo"><br><br>
     <input type="password" placeholder="contraseña"><br><br>
-    <input type="submit" value="Ingresa">
+    <div id="error"></div><br>
+    <input id="loginBtnView" type="submit" value="Ingresa">
   </form><br>
   <button id="returnBtn">Volver</button>
-  `)
-}
+  `);
