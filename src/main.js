@@ -31,12 +31,7 @@ const selectBtns = () => {
   if (loginBtn) {
     loginBtn.addEventListener('click', async () => {
       onNavigate('/login');
-    });
-  }
-
-  if (loginBtnView) {
-    loginBtnView.addEventListener('click', () => {
-      loginUser();
+      loginUser()
     });
   }
 

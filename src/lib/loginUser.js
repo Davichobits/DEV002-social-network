@@ -1,9 +1,9 @@
 import { loginFirebase } from '../firebase/auth.js';
+import { onNavigate } from '../main.js';
 
 export const loginUser = () => {
   const form = document.querySelector('#form');
   const errorDiv = document.querySelector('#error');
-  let logged = false;
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -18,9 +18,7 @@ export const loginUser = () => {
     } else if (result === 'Firebase: Error (auth/invalid-email).') {
       errorDiv.innerText = 'Por favor ingresa un correo';
     } else {
-      errorDiv.innerText = 'Bienvenido';
-      logged = true;
+      onNavigate('/profile');
     }
-    return logged;
   });
 };
