@@ -4,6 +4,7 @@ import { Register } from './components/Register.js';
 import { Login } from './components/Login.js';
 import { Profile } from './components/Profile.js';
 import { registerUser } from './lib/registerUser.js';
+import { loginUser } from './lib/loginUser.js';
 
 const root = document.querySelector('#root');
 
@@ -18,6 +19,7 @@ const selectBtns = () => {
   const registerBtn = document.querySelector('#registerBtn');
   const loginBtn = document.querySelector('#loginBtn');
   const returnBtn = document.querySelector('#returnBtn');
+  const loginBtnView = document.querySelector('#loginBtnView')
 
   if (registerBtn) {
     registerBtn.addEventListener('click', () => {
@@ -27,9 +29,14 @@ const selectBtns = () => {
   }
 
   if (loginBtn) {
-    loginBtn.addEventListener('click', () => {
+    loginBtn.addEventListener('click', async () => {
       onNavigate('/login');
-      registerUser();
+    });
+  }
+
+  if (loginBtnView) {
+    loginBtnView.addEventListener('click', () => {
+      loginUser();
     });
   }
 
