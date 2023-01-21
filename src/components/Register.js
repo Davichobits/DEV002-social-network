@@ -1,5 +1,4 @@
-export const Register = () => {
-  return (`<h1>Regístrate Aquí:</h1>
+export const Register = () => (`<h1>Regístrate Aquí:</h1>
   <form id="form" action="">
     <input type="email" placeholder="correo"><br><br>
     <input type="password" placeholder="contraseña"><br><br>
@@ -8,5 +7,4 @@ export const Register = () => {
     <input type="submit" value="Registrarse">
   </form><br>
   <button id="returnBtn">Volver</button>
-  `)
-}
+  `);

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import { loginFirebase } from '../firebase/auth.js';
 import { onNavigate } from '../main.js';
 
@@ -11,6 +12,7 @@ export const loginUser = () => {
     const password = event.target[1].value;
 
     const result = await loginFirebase(email, password);
+
     if (result === 'Firebase: Error (auth/wrong-password).') {
       errorDiv.innerText = 'Contraseña incorrecta';
     } else if (result === 'Firebase: Error (auth/internal-error).') {
