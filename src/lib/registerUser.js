@@ -1,4 +1,5 @@
-import { registerFirebase } from '../firebase/auth.js';
+import { registerFirebase, writeUserData } from '../firebase/auth.js';
+import { onNavigate } from '../main.js';
 
 export const registerUser = () => {
   const form = document.querySelector('#form');
@@ -6,12 +7,15 @@ export const registerUser = () => {
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
-    const email = event.target[0].value;
-    const password = event.target[1].value;
-    const passwordConfirmed = event.target[2].value;
+    const nameUser = event.target[0].value;
+    const emailUser = event.target[1].value;
+    const password = event.target[2].value;
+    const passwordConfirmed = event.target[3].value;
+
+    
 
     if (password === passwordConfirmed) {
-      const result = await registerFirebase(email, password);
+      const result = await registerFirebase(emailUser, password);
       if (result === 'Firebase: Error (auth/email-already-in-use).') {
         errorDiv.innerText = 'Correo ya existe';
       } else if (result === 'Firebase: Password should be at least 6 characters (auth/weak-password).') {
@@ -21,7 +25,18 @@ export const registerUser = () => {
       } else if (result === 'Firebase: Error (auth/invalid-email).') {
         errorDiv.innerText = 'Por favor ingresa un correo';
       } else {
-        errorDiv.innerText = 'correo creado exitosamente';
+
+        const newUser = {
+          id: result.user.uid,
+          name: nameUser,
+          email: emailUser,
+          pass: password,
+          passConfirmed: passwordConfirmed,
+        };
+
+        writeUserData(newUser.id, newUser);
+        alert(`${newUser.name}, tu cuenta ha sido creada correctamente`);
+        onNavigate('/login');
       }
     } else {
       errorDiv.innerText = 'Las contraseñas no coinciden';

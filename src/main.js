@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 /* eslint-disable no-use-before-define */
 import { Home } from './components/Home.js';
 import { Register } from './components/Register.js';
@@ -5,6 +6,7 @@ import { Login } from './components/Login.js';
 import { Profile } from './components/Profile.js';
 import { registerUser } from './lib/registerUser.js';
 import { loginUser } from './lib/loginUser.js';
+import { stateUser } from './lib/stateUser.js';
 
 const root = document.querySelector('#root');
 
@@ -19,7 +21,6 @@ const selectBtns = () => {
   const registerBtn = document.querySelector('#registerBtn');
   const loginBtn = document.querySelector('#loginBtn');
   const returnBtn = document.querySelector('#returnBtn');
-  const loginBtnView = document.querySelector('#loginBtnView')
 
   if (registerBtn) {
     registerBtn.addEventListener('click', () => {
@@ -31,7 +32,7 @@ const selectBtns = () => {
   if (loginBtn) {
     loginBtn.addEventListener('click', async () => {
       onNavigate('/login');
-      loginUser()
+      loginUser();
     });
   }
 
@@ -49,7 +50,11 @@ export const onNavigate = (pathname) => {
     window.location.origin + pathname,
   );
   root.innerHTML = routes[pathname]();
-  selectBtns();
+  if (pathname === '/profile') {
+    stateUser();
+  } else {
+    selectBtns();
+  }
 };
 
 root.innerHTML = routes[window.location.pathname]();
