@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import { loginFirebase } from '../firebase/auth.js';
+import { loginFirebase, readUserData } from '../firebase/auth.js';
 import { onNavigate } from '../main.js';
 
 export const loginUser = () => {
@@ -19,7 +19,12 @@ export const loginUser = () => {
       errorDiv.innerText = 'Por favor ingresa una contraseña';
     } else if (result === 'Firebase: Error (auth/invalid-email).') {
       errorDiv.innerText = 'Por favor ingresa un correo';
+    } else if (result === 'Firebase: Error (auth/user-not-found).') {
+      errorDiv.innerText = 'Usuario no encontrado';
     } else {
+      console.log('si llego aqui')
+      let userId = result.user.uid;
+      readUserData();
       onNavigate('/profile');
     }
   });
