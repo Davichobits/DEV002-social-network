@@ -1,6 +1,6 @@
 /* eslint-disable import/no-unresolved */
 // Import the functions you need from the SDKs you need
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.16.0/firebase-app.js';
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-app.js';
 import {
   updateProfile,
   signInWithPopup,
@@ -9,7 +9,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   onAuthStateChanged,
-} from 'https://www.gstatic.com/firebasejs/9.16.0/firebase-auth.js';
+} from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-auth.js';
 import {
   getFirestore,
   collection,
@@ -21,7 +21,7 @@ import {
   onSnapshot,
   doc,
   setDoc,
-} from 'https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js';
+} from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-firestore.js';
 
 import { config } from './config.js';
 // TODO: Add SDKs for Firebase products that you want to use
