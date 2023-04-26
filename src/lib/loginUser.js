@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import { loginFirebase, readUserData } from '../firebase/auth.js';
+import { loginFirebase } from '../firebase/auth.js';
 import { onNavigate } from '../main.js';
 
 export const loginUser = () => {
@@ -22,9 +22,8 @@ export const loginUser = () => {
     } else if (result === 'Firebase: Error (auth/user-not-found).') {
       errorDiv.innerText = 'Usuario no encontrado';
     } else {
-      console.log('si llego aqui')
-      let userId = result.user.uid;
-      readUserData();
+      // let userId = result.user.uid;
+      // readUserData();
       onNavigate('/profile');
     }
   });

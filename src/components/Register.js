@@ -7,5 +7,6 @@ export const Register = () => (`<h1>Regístrate Aquí:</h1>
     <div id="error"></div><br>
     <input type="submit" value="Registrarse">
   </form><br>
+  <button id="googleBtn">Ingresar con Google</button>
   <button id="returnBtn">Volver</button>
   `);

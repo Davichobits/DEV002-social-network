@@ -6,5 +6,6 @@ export const Login = () => (
     <div id="error"></div><br>
     <input id="loginBtnView" type="submit" value="Ingresa">
   </form><br>
+  <button id="returnBtn">Volver</button><br>
   <button id="returnBtn">Volver</button>
   `);

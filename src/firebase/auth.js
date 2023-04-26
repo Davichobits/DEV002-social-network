@@ -1,11 +1,11 @@
 import {
   signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
+  // createUserWithEmailAndPassword,
   onAuthStateChanged,
   auth,
   db, doc,
-  collection, addDoc, getDocs, getDoc, setDoc,
-  query, where, onSnapshot,
+  collection, getDocs, setDoc,
+  query, where, signInWithPopup, GoogleAuthProvider, provider,
 } from './init.js';
 
 export const loginFirebase = async (email, password) => {
@@ -16,22 +16,22 @@ export const loginFirebase = async (email, password) => {
   }
 };
 
-export const registerFirebase = async (email, password) => {
-  try {
-    return await createUserWithEmailAndPassword(auth, email, password);
-  } catch (error) {
-    return error.message;
-  }
-};
+// export const registerFirebase = async (email, password) => {
+//   try {
+//     return await createUserWithEmailAndPassword(auth, email, password);
+//   } catch (error) {
+//     return error.message;
+//   }
+// };
 
 export const stateFirebase = async () => {
   let result = '';
   try {
     await onAuthStateChanged(auth, (user) => {
       if (user) {
-        result = auth.currentUser.email;
+        result = auth.currentUser.uid;
       } else {
-        console.log('usuario deslogeado');
+        // console.log('usuario deslogeado');
       }
     });
     return result;
@@ -42,7 +42,7 @@ export const stateFirebase = async () => {
 
 export const writeUserData = async (id, object) => {
   try {
-    const userRef = collection(db, "user");
+    const userRef = collection(db, 'user');
 
     await setDoc(doc(userRef, id), object);
 
@@ -50,7 +50,7 @@ export const writeUserData = async (id, object) => {
     // const docRef = await addDoc(collection(db, 'users'), object);
     // console.log("Document written with ID: ", docRef.id);
   } catch (e) {
-    console.error("Error adding document: ", e);
+    // console.error('Error adding document: ', e);
   }
 };
 
@@ -66,18 +66,45 @@ export const readUserData = async () => {
     //   console.log("No such document!");
     // }
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
 };
 
-export const searchByEmail = async (email) => {
-  const usersRef = collection(db, "users");
-  const querResult = query(usersRef, where("email", "==", email));
-  let result = await onSnapshot(
-    querResult,
-    (querySnapshot) => {
-      result = JSON.stringify(querySnapshot.docs.map((e)=>e.data().name));
-      return result;
+export const searchNameById = async (id) => {
+  const usersRef = collection(db, 'user');
+  const q = query(usersRef, where('id', '==', id));
+  const querySnapshot = await getDocs(q);
+
+  let userName;
+
+  // eslint-disable-next-line no-shadow
+  await querySnapshot.forEach((doc) => {
+    userName = doc.data().name;
+  });
+
+  return userName;
+};
+
+export const launchGoogleLogin = async () => {
+  signInWithPopup(auth, provider)
+    .then((result) => {
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential.accessToken;
+      console.log('token: ', token);
+      // The signed-in user info.
+      const user = result.user;
+      console.log('user: ', user);
+      // ...
+    }).catch((error) => {
+      console.log(error);
+      // Handle Errors here.
+      // const errorCode = error.code;
+      // const errorMessage = error.message;
+      // The email of the user's account used.
+      // const email = error.customData.email;
+      // The AuthCredential type that was used.
+      // const credential = GoogleAuthProvider.credentialFromError(error);
+      // ...
     });
-  console.log(`El resultado de buscar la data de este correo: ${email} es: ${result}`);
 };

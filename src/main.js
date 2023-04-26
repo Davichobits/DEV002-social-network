@@ -6,7 +6,7 @@ import { Login } from './components/Login.js';
 import { Profile } from './components/Profile.js';
 import { registerUser } from './lib/registerUser.js';
 import { loginUser } from './lib/loginUser.js';
-import { stateUser } from './lib/stateUser.js';
+import { profileUser } from './lib/profileUser.js';
 
 const root = document.querySelector('#root');
 
@@ -51,7 +51,7 @@ export const onNavigate = (pathname) => {
   );
   root.innerHTML = routes[pathname]();
   if (pathname === '/profile') {
-    stateUser();
+    profileUser();
   } else {
     selectBtns();
   }
