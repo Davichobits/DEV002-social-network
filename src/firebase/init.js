@@ -4,11 +4,13 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.20.0/firebas
 import {
   updateProfile,
   signInWithPopup,
+  signInWithRedirect,
   GoogleAuthProvider,
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   onAuthStateChanged,
+  getRedirectResult,
 } from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-auth.js';
 import {
   getFirestore,
@@ -47,6 +49,8 @@ export {
   db,
   auth,
   collection, addDoc, getDocs, query, where, onSnapshot,
-  doc, getDoc, setDoc, updateProfile, signInWithPopup, GoogleAuthProvider, provider,
+  doc, getDoc, setDoc, updateProfile, signInWithRedirect,
+  signInWithPopup, GoogleAuthProvider, provider,
+  getRedirectResult,
   registerFirebase,
 };

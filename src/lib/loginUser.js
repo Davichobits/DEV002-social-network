@@ -1,10 +1,12 @@
 /* eslint-disable import/no-cycle */
-import { loginFirebase } from '../firebase/auth.js';
+import { loginFirebase, launchGoogleLogin } from '../firebase/auth.js';
+import { GoogleAuthProvider } from '../firebase/init.js';
 import { onNavigate } from '../main.js';
 
 export const loginUser = () => {
   const form = document.querySelector('#form');
   const errorDiv = document.querySelector('#error');
+  const loginGoogleBtn = document.querySelector('#loginGoogleBtn');
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -24,6 +26,21 @@ export const loginUser = () => {
     } else {
       // let userId = result.user.uid;
       // readUserData();
+      onNavigate('/profile');
+    }
+  });
+
+  loginGoogleBtn.addEventListener('click', async () => {
+    const result = await launchGoogleLogin();
+
+    const credential = GoogleAuthProvider.credentialFromResult(result);
+    const token = credential.accessToken;
+    const user = result.user;
+
+    //Guardardo localstorage
+    localStorage.setItem('token', token);
+
+    if (user) {
       onNavigate('/profile');
     }
   });

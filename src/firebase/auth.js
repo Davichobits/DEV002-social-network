@@ -1,6 +1,7 @@
 import {
   signInWithEmailAndPassword,
   // createUserWithEmailAndPassword,
+  signInWithRedirect,
   onAuthStateChanged,
   auth,
   db, doc,
@@ -86,3 +87,4 @@ export const searchNameById = async (id) => {
 };
 
 export const launchGoogleLogin = () => signInWithPopup(auth, provider);
+export const launchGoogleRegister = () => signInWithRedirect(auth, provider);
