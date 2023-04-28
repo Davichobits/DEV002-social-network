@@ -23,7 +23,7 @@ export const registerUser = () => {
     localStorage.setItem('token', token);
 
     if (user) {
-      onNavigate('/profile');
+      onNavigate('/success');
     }
   });
 
@@ -50,9 +50,7 @@ export const registerUser = () => {
           displayName: nameUser,
           photoURL: '../img/perfil.png',
         });
-
-        alert(`${nameUser}, tu cuenta ha sido creada correctamente`);
-        onNavigate('/login');
+        onNavigate('/success');
       }
     } else {
       errorDiv.innerText = 'Las contraseñas no coinciden';

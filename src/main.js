@@ -4,6 +4,7 @@ import { Home } from './components/Home.js';
 import { Register } from './components/Register.js';
 import { Login } from './components/Login.js';
 import { Profile } from './components/Profile.js';
+import { SuccessfullyRegister } from './components/SuccessfullyRegister.js';
 import { registerUser } from './lib/registerUser.js';
 import { loginUser } from './lib/loginUser.js';
 import { profileUser } from './lib/profileUser.js';
@@ -15,6 +16,7 @@ const routes = {
   '/register': Register,
   '/login': Login,
   '/profile': Profile,
+  '/success': SuccessfullyRegister,
 };
 
 const selectBtns = () => {
