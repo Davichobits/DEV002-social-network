@@ -1,9 +1,11 @@
 // import { stateFirebase, readUserData } from '../firebase/auth.js';
 import { auth, onAuthStateChanged } from '../firebase/init.js';
+import { onNavigate } from '../main.js';
 
 export const profileUser = async () => {
   const newPostLabel = document.querySelector('#newPostLabel');
   const profileImg = document.querySelector('#profileImg');
+  const closeSesion = document.querySelector('#closeSesion');
   // const newPost = document.querySelector('#newPost');
 
   // Observador
@@ -22,5 +24,11 @@ export const profileUser = async () => {
     } else {
       console.log('Usuario deslogeado');
     }
+  });
+
+  // Cerrar sesion
+  closeSesion.addEventListener('click', () => {
+    auth.signOut();
+    onNavigate('/');
   });
 };

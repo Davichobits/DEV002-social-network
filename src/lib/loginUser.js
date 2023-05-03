@@ -37,7 +37,7 @@ export const loginUser = () => {
     const token = credential.accessToken;
     const user = result.user;
 
-    //Guardardo localstorage
+    // Guardardo localstorage
     localStorage.setItem('token', token);
 
     if (user) {
