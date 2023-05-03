@@ -1,8 +1,10 @@
 // import { stateFirebase, readUserData } from '../firebase/auth.js';
 import { auth, onAuthStateChanged } from '../firebase/init.js';
+// eslint-disable-next-line import/no-cycle
 import { onNavigate } from '../main.js';
+// eslint-disable-next-line import/no-cycle
 
-export const profileUser = async () => {
+export const profileLogic = async () => {
   const newPostLabel = document.querySelector('#newPostLabel');
   const profileImg = document.querySelector('#profileImg');
   const closeSesion = document.querySelector('#closeSesion');
@@ -18,8 +20,10 @@ export const profileUser = async () => {
       }
       if (user.photoURL) {
         profileImg.src = user.photoURL;
+        localStorage.setItem('photoURL', user.photoURL);
       } else {
         profileImg.src = '../img/perfil.png';
+        localStorage.setItem('photoURL', '../img/perfil.png');
       }
     } else {
       console.log('Usuario deslogeado');

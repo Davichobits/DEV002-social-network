@@ -5,9 +5,10 @@ import { Register } from './components/Register.js';
 import { Login } from './components/Login.js';
 import { Profile } from './components/Profile.js';
 import { SuccessfullyRegister } from './components/SuccessfullyRegister.js';
-import { registerUser } from './lib/registerUser.js';
-import { loginUser } from './lib/loginUser.js';
-import { profileUser } from './lib/profileUser.js';
+
+import { registerLogic } from './lib/registerLogic.js';
+import { loginLogic } from './lib/loginLogic.js';
+import { profileLogic } from './lib/profileLogic.js';
 
 const root = document.querySelector('#root');
 
@@ -27,14 +28,14 @@ const selectBtns = () => {
   if (registerBtn) {
     registerBtn.addEventListener('click', () => {
       onNavigate('/register');
-      registerUser();
+      // registerLogic();
     });
   }
 
   if (loginBtn) {
     loginBtn.addEventListener('click', async () => {
       onNavigate('/login');
-      loginUser();
+      // loginLogic();
     });
   }
 
@@ -46,18 +47,25 @@ const selectBtns = () => {
 };
 
 export const onNavigate = (pathname) => {
+  window.localStorage.setItem('state', pathname);
   window.history.pushState(
     {},
     pathname,
     window.location.origin + pathname,
   );
   root.innerHTML = routes[pathname]();
-  if (pathname === '/profile') {
-    profileUser();
-  } else {
-    selectBtns();
+  console.log('estamos aqui: ' + pathname)
+  if (pathname === '/login') {
+    loginLogic();
+  } else if (pathname === '/profile') {
+    profileLogic();
+  } else if (pathname === '/register') {
+    registerLogic();
   }
+  selectBtns();
 };
 
 root.innerHTML = routes[window.location.pathname]();
 selectBtns();
+
+onNavigate(window.localStorage.getItem('state'));

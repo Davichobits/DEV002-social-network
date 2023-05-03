@@ -8,8 +8,9 @@ import {
 } from '../firebase/init.js';
 // eslint-disable-next-line import/no-cycle
 import { onNavigate } from '../main.js';
+import { Profile } from '../components/Profile.js';
 
-export const registerUser = () => {
+export const registerLogic = () => {
   const form = document.querySelector('#form');
   const errorDiv = document.querySelector('#error');
   const googleBtn = document.querySelector('#googleBtn');
@@ -21,12 +22,13 @@ export const registerUser = () => {
     const token = credential.accessToken;
     const user = result.user;
 
-    //Guardardo localstorage
+    // Guardardo localstorage
     localStorage.setItem('token', token);
 
-    if (user) {
-      onNavigate('/profile');
-    }
+    // if (user) {
+    //   onNavigate('/profile');
+    //   Profile.initialize();
+    // }
   });
 
   form.addEventListener('submit', async (event) => {
@@ -52,7 +54,6 @@ export const registerUser = () => {
           displayName: nameUser,
           photoURL: '../img/perfil.png',
         });
-        onNavigate('/success');
       }
     } else {
       errorDiv.innerText = 'Las contraseñas no coinciden';

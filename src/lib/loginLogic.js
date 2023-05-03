@@ -3,7 +3,7 @@ import { loginFirebase, launchGoogleLogin } from '../firebase/auth.js';
 import { GoogleAuthProvider } from '../firebase/init.js';
 import { onNavigate } from '../main.js';
 
-export const loginUser = () => {
+export const loginLogic = () => {
   const form = document.querySelector('#form');
   const errorDiv = document.querySelector('#error');
   const loginGoogleBtn = document.querySelector('#loginGoogleBtn');
