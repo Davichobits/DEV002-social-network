@@ -88,3 +88,12 @@ export const searchNameById = async (id) => {
 
 export const launchGoogleLogin = () => signInWithPopup(auth, provider);
 export const launchGoogleRegister = () => signInWithRedirect(auth, provider);
+
+// FIREBASE
+
+// Guardado de post en firebase
+const postRef = collection(db, 'posts');
+
+export const savePost = (post) => setDoc(doc(postRef), post);
+
+export const getPosts = () => getDocs(postRef);
