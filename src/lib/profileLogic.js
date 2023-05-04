@@ -26,7 +26,8 @@ export const profileLogic = async () => {
         localStorage.setItem('photoURL', '../img/perfil.png');
       }
     } else {
-      console.log('Usuario deslogeado');
+      // proteger ruta
+      onNavigate('/');
     }
   });
 
