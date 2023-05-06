@@ -10,6 +10,19 @@ export const profileLogic = async () => {
   const closeSesion = document.querySelector('#closeSesion');
   const postBtn = document.querySelector('#postBtn');
   const newPost = document.querySelector('#newPost');
+  const postsContainer = document.querySelector('#postsContainer');
+
+  // Traer post de firebase
+  const querySnapshot = await getPosts();
+  querySnapshot.forEach((doc) => {
+    postsContainer.innerHTML += `
+          <div class="border-2 max-w-sm m-auto rounded-lg p-2 my-4">
+            <p>${doc.data().post}</p>
+          <div>
+        
+        `;
+    // console.log(doc.id, " => ", doc.data());
+  });
 
   // Observador
   onAuthStateChanged(auth, (user) => {
@@ -62,12 +75,18 @@ export const profileLogic = async () => {
       newPost.value = '';
 
       // Mostrar post
-      const postsContainer = document.querySelector('#postsContainer');
+      
 
       // Traer post de firebase
       const querySnapshot = await getPosts();
       querySnapshot.forEach((doc) => {
-        console.log(doc.id, " => ", doc.data());
+        postsContainer.innerHTML += `
+          <div >
+            <p>${doc.data().post}</p>
+          <div>
+        
+        `;
+        // console.log(doc.id, " => ", doc.data());
       });
     }
   });
