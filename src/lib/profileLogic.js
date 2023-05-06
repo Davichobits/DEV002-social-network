@@ -15,9 +15,19 @@ export const profileLogic = async () => {
   // Traer post de firebase
   const querySnapshot = await getPosts();
   querySnapshot.forEach((doc) => {
+    postsContainer.innerHTM = '';
     postsContainer.innerHTML += `
-          <div class="border-2 max-w-sm m-auto rounded-lg p-2 my-4">
+          <div class="border-2 rounded-lg p-2 my-4">
+            <div class='flex place-content-end'>
+              <img class='w-4' src='../img/icons/corazon.png' alt='icon' />
+            </div>
             <p>${doc.data().post}</p>
+            <div class='flex place-content-end'>
+              <div class='flex w-12  place-content-between'>
+                <img class='w-4' src='../img/icons/basura.png' alt='icon' />
+                <img class='w-4' src='../img/icons/editar.png' alt='icon' />
+              </div>
+            </div>
           <div>
         
         `;
@@ -80,8 +90,9 @@ export const profileLogic = async () => {
       // Traer post de firebase
       const querySnapshot = await getPosts();
       querySnapshot.forEach((doc) => {
+        postsContainer.innerHTM = '';
         postsContainer.innerHTML += `
-          <div >
+          <div class="border-2 rounded-lg p-2 my-4">
             <p>${doc.data().post}</p>
           <div>
         
