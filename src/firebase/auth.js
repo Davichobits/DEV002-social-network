@@ -91,9 +91,6 @@ export const launchGoogleRegister = () => signInWithRedirect(auth, provider);
 
 // FIREBASE
 
-// Guardado de post en firebase
-const postRef = collection(db, 'posts');
+export const savePost = (post, userID) => setDoc(doc(collection(db, userID)), post);
 
-export const savePost = (post) => setDoc(doc(postRef), post);
-
-export const getPosts = () => getDocs(postRef);
+export const getPosts = (userID) => getDocs(collection(db, userID));

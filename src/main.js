@@ -54,7 +54,6 @@ export const onNavigate = (pathname) => {
     window.location.origin + pathname,
   );
   root.innerHTML = routes[pathname]();
-  console.log('estamos aqui: ' + pathname)
   if (pathname === '/login') {
     loginLogic();
   } else if (pathname === '/profile') {

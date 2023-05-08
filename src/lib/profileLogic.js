@@ -4,18 +4,14 @@ import { auth, onAuthStateChanged } from '../firebase/init.js';
 import { onNavigate } from '../main.js';
 // eslint-disable-next-line import/no-cycle
 
-export const profileLogic = async () => {
-  const newPostLabel = document.querySelector('#newPostLabel');
-  const profileImg = document.querySelector('#profileImg');
-  const closeSesion = document.querySelector('#closeSesion');
-  const postBtn = document.querySelector('#postBtn');
-  const newPost = document.querySelector('#newPost');
-  const postsContainer = document.querySelector('#postsContainer');
-
-  // Traer post de firebase
-  const querySnapshot = await getPosts();
+// Dibujar post de firebase
+function drawPostFromFirebase(querySnapshot, postsContainer) {
+  // eslint-disable-next-line no-param-reassign
+  postsContainer.innerHTML = '';
+  console.log(postsContainer);
   querySnapshot.forEach((doc) => {
-    postsContainer.innerHTM = '';
+    // eslint-disable-next-line no-param-reassign
+    // eslint-disable-next-line no-param-reassign
     postsContainer.innerHTML += `
           <div class="border-2 rounded-lg p-2 my-4">
             <div class='flex place-content-between'>
@@ -34,9 +30,18 @@ export const profileLogic = async () => {
         `;
     // console.log(doc.id, " => ", doc.data());
   });
+}
+
+export const profileLogic = async () => {
+  const newPostLabel = document.querySelector('#newPostLabel');
+  const profileImg = document.querySelector('#profileImg');
+  const closeSesion = document.querySelector('#closeSesion');
+  const postBtn = document.querySelector('#postBtn');
+  const newPost = document.querySelector('#newPost');
+  const postsContainer = document.querySelector('#postsContainer');
 
   // Observador
-  onAuthStateChanged(auth, (user) => {
+  onAuthStateChanged(auth, async (user) => {
     if (user) {
       if (user.displayName) {
         newPostLabel.innerText = `En que estás pensando hoy ${user.displayName}?`;
@@ -50,6 +55,9 @@ export const profileLogic = async () => {
         profileImg.src = '../img/perfil.png';
         localStorage.setItem('photoURL', '../img/perfil.png');
       }
+      // Dibujar los posts por primera vez
+      const querySnapshot = await getPosts(auth.currentUser.uid);
+      drawPostFromFirebase(querySnapshot, postsContainer);
     } else {
       // proteger ruta
       onNavigate('/');
@@ -68,39 +76,25 @@ export const profileLogic = async () => {
     newPost.value = newPost.value.trim();
 
     const newPostObject = {
-      userUid: user.uid,
+      likes: [],
       post: newPost.value,
-    }
+    };
 
     if (newPost.value === '') {
       alert('No puedes publicar un post vacio');
     } else {
       // Guardar en firebase
       try {
-        savePost(newPostObject);
-        console.log('post guardado');
+        savePost(newPostObject, auth.currentUser.uid);
+        // Limpiar input
+        newPost.value = '';
+
+        // Dibujar los post actualizados
+        const querySnapshot = await getPosts(auth.currentUser.uid);
+        drawPostFromFirebase(querySnapshot, postsContainer);
       } catch (error) {
         console.log(error);
       }
-
-      // Limpiar input
-      newPost.value = '';
-
-      // Mostrar post
-      
-
-      // Traer post de firebase
-      const querySnapshot = await getPosts();
-      querySnapshot.forEach((doc) => {
-        postsContainer.innerHTM = '';
-        postsContainer.innerHTML += `
-          <div class="border-2 rounded-lg p-2 my-4">
-            <p>${doc.data().post}</p>
-          <div>
-        
-        `;
-        // console.log(doc.id, " => ", doc.data());
-      });
     }
   });
 };
