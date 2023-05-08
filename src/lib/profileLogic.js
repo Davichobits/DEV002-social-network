@@ -18,14 +18,15 @@ export const profileLogic = async () => {
     postsContainer.innerHTM = '';
     postsContainer.innerHTML += `
           <div class="border-2 rounded-lg p-2 my-4">
-            <div class='flex place-content-end'>
-              <img class='w-4' src='../img/icons/corazon.png' alt='icon' />
+            <div class='flex place-content-between'>
+              <p class='w-20 text-gray-400 text-[10px]'>5-may-23</p>
+              <img class='w-4 cursor-pointer' src='../img/icons/corazon.png' alt='icon' />
             </div>
-            <p>${doc.data().post}</p>
+            <p class='my-4 mx-2'>${doc.data().post}</p>
             <div class='flex place-content-end'>
               <div class='flex w-12  place-content-between'>
-                <img class='w-4' src='../img/icons/basura.png' alt='icon' />
-                <img class='w-4' src='../img/icons/editar.png' alt='icon' />
+                <img class='w-4 cursor-pointer' src='../img/icons/basura.png' alt='icon' />
+                <img class='w-4 cursor-pointer' src='../img/icons/editar.png' alt='icon' />
               </div>
             </div>
           <div>
@@ -67,6 +68,7 @@ export const profileLogic = async () => {
     newPost.value = newPost.value.trim();
 
     const newPostObject = {
+      userUid: user.uid,
       post: newPost.value,
     }
 
