@@ -5,13 +5,14 @@ import { onNavigate } from '../main.js';
 // eslint-disable-next-line import/no-cycle
 
 // Dibujar post de firebase
-const drawPostFromFirebase = (querySnapshot, postsContainer) => {
+const drawPostFromFirebase = (querySnapshot, postsContainer, userId) => {
   // eslint-disable-next-line no-param-reassign
   postsContainer.innerHTML = '';
   querySnapshot.forEach((doc) => {
     // eslint-disable-next-line no-param-reassign
     // eslint-disable-next-line no-param-reassign
     const likesCounter = doc.data().likes.length;
+    const idUserInPost = doc.data().userId;
     postsContainer.innerHTML += `
           <div class="border-2 rounded-lg p-2 my-4" id="${doc.id}">
             <div class='flex place-content-between '>
@@ -23,7 +24,7 @@ const drawPostFromFirebase = (querySnapshot, postsContainer) => {
             </div>
             <p class='my-4 mx-2'>${doc.data().post}</p>
             <div class='flex place-content-end'>
-              <div class='flex w-12  place-content-between'>
+              <div class='flex w-12 place-content-between ${(idUserInPost === userId) ? 'block' : 'hidden'}'>
                 <img class='w-4 cursor-pointer' src='../img/icons/basura.png' alt='icon' />
                 <img class='w-4 cursor-pointer' src='../img/icons/editar.png' alt='icon' />
               </div>
@@ -75,8 +76,9 @@ export const profileLogic = async () => {
         localStorage.setItem('photoURL', '../img/perfil.png');
       }
       // Dibujar los posts por primera vez
+      const userId = auth.currentUser.uid;
       const allPosts = await getPosts('posts');
-      drawPostFromFirebase(allPosts, postsContainer);
+      drawPostFromFirebase(allPosts, postsContainer, userId);
       postsLogic();
     } else {
       // proteger ruta
