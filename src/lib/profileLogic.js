@@ -1,4 +1,4 @@
-import { savePost, getPosts, deletePost, updateNumberOfLikes } from '../firebase/auth.js';
+import { savePost, getPosts, deletePost, updateNumberOfLikes, updatePost } from '../firebase/auth.js';
 import { auth, onAuthStateChanged } from '../firebase/init.js';
 // eslint-disable-next-line import/no-cycle
 import { onNavigate } from '../main.js';
@@ -26,7 +26,7 @@ const drawPostFromFirebase = (querySnapshot, postsContainer, userId) => {
             <div class='flex place-content-end'>
               <div class='flex w-12 place-content-between ${(idUserInPost === userId) ? 'block' : 'hidden'}'>
                 <img class='trashBtn w-4 cursor-pointer' src='../img/icons/basura.png' alt='icon' />
-                <img class='w-4 cursor-pointer' src='../img/icons/editar.png' alt='icon' />
+                <img class='editBtn w-4 cursor-pointer' src='../img/icons/editar.png' alt='icon' />
               </div>
             </div>
           <div>
@@ -37,7 +37,7 @@ const drawPostFromFirebase = (querySnapshot, postsContainer, userId) => {
 }
 
 const postsLogic = () => {
-  //Boton de like
+  // Boton de like
   const hearthBtn = document.querySelectorAll('.hearthBtn');
   hearthBtn.forEach((btn) => {
     btn.addEventListener('click', async (event) => {
@@ -62,6 +62,25 @@ const postsLogic = () => {
         console.log(result);
         const idPost = event.target.parentElement.parentElement.parentElement.id;
         await deletePost(idPost);
+        // Volver a dibujar los posts
+        const userId = auth.currentUser.uid;
+        const allPosts = await getPosts('posts');
+        const postsContainer = document.querySelector('#postsContainer');
+        drawPostFromFirebase(allPosts, postsContainer, userId);
+        postsLogic();
+      }
+    });
+  });
+
+  // Boton editar post
+  const editBtn = document.querySelectorAll('.editBtn');
+  editBtn.forEach((btn) => {
+    btn.addEventListener('click', async (event) => {
+      const idPost = event.target.parentElement.parentElement.parentElement.id;
+      const post = event.target.parentElement.parentElement.parentElement.children[1].innerText;
+      const newPost = prompt('Edita tu post', post);
+      if (newPost !== null) {
+        await updatePost(idPost, newPost);
         // Volver a dibujar los posts
         const userId = auth.currentUser.uid;
         const allPosts = await getPosts('posts');

@@ -110,20 +110,32 @@ export const updateNumberOfLikes = async (userID, idPost) => {
         likes: arrayUnion(userID),
       });
     } else {
-
       // Quito el id del usuario que ya le ha dado like
       const arrayWithoutLike = postObject.likes.filter((like) => like !== userID);
-
       updateDoc(postRef, {
         ...postObject,
         likes: arrayWithoutLike,
       });
     }
-    
   }
 };
 
 export const deletePost = (idPost) => {
   const postRef = doc(db, 'posts', idPost);
   deleteDoc(postRef);
+};
+
+export const updatePost = async (idPost, newPost) => {
+  // Referencia del post
+  const postRef = doc(db, 'posts', idPost);
+  // Obtener el post con el id
+  const docSnap = await getDoc(postRef);
+  if (docSnap.exists()) {
+    const postObject = docSnap.data();
+    // Actualizar el numero de likes de ese post
+    updateDoc(postRef, {
+      ...postObject,
+      post: newPost,
+    });
+  }
 };
