@@ -11,11 +11,15 @@ const drawPostFromFirebase = (querySnapshot, postsContainer) => {
   querySnapshot.forEach((doc) => {
     // eslint-disable-next-line no-param-reassign
     // eslint-disable-next-line no-param-reassign
+    const likesCounter = doc.data().likes.length;
     postsContainer.innerHTML += `
           <div class="border-2 rounded-lg p-2 my-4" id="${doc.id}">
-            <div class='flex place-content-between'>
+            <div class='flex place-content-between '>
               <p class='w-20 text-gray-400 text-[10px]'>5-may-23</p>
-              <img class='hearthBtn w-4 cursor-pointer' src='../img/icons/corazon.png' alt='icon' />
+              <div class="flex items-center w-8 place-content-between">
+                <span>${likesCounter}</span><img class='hearthBtn w-4 cursor-pointer' src='../img/icons/corazon.png' alt='icon' />
+              </div>
+              
             </div>
             <p class='my-4 mx-2'>${doc.data().post}</p>
             <div class='flex place-content-end'>
@@ -35,9 +39,14 @@ const postsLogic = () => {
   //Boton de like
   const hearthBtn = document.querySelectorAll('.hearthBtn');
   hearthBtn.forEach((btn) => {
-    btn.addEventListener('click', (event) => {
-      const idPost = event.target.parentElement.parentElement.id;
+    btn.addEventListener('click', async (event) => {
+      const idPost = event.target.parentElement.parentElement.parentElement.id;
       updateNumberOfLikes(auth.currentUser.uid, idPost);
+      // Dibujar los posts por primera vez
+      const allPosts = await getPosts('posts');
+      const postsContainer = document.querySelector('#postsContainer');
+      drawPostFromFirebase(allPosts, postsContainer);
+      postsLogic();
     });
   });
 };
@@ -66,8 +75,8 @@ export const profileLogic = async () => {
         localStorage.setItem('photoURL', '../img/perfil.png');
       }
       // Dibujar los posts por primera vez
-      const querySnapshot = await getPosts(auth.currentUser.uid);
-      drawPostFromFirebase(querySnapshot, postsContainer);
+      const allPosts = await getPosts('posts');
+      drawPostFromFirebase(allPosts, postsContainer);
       postsLogic();
     } else {
       // proteger ruta
@@ -87,6 +96,7 @@ export const profileLogic = async () => {
     newPost.value = newPost.value.trim();
 
     const newPostObject = {
+      userId: auth.currentUser.uid,
       likes: [],
       post: newPost.value,
     };
@@ -96,13 +106,13 @@ export const profileLogic = async () => {
     } else {
       // Guardar en firebase
       try {
-        savePost(newPostObject, auth.currentUser.uid);
+        savePost(newPostObject);
         // Limpiar input
         newPost.value = '';
 
         // Dibujar los post actualizados
-        const currentUserPosts = await getPosts(auth.currentUser.uid);
-        drawPostFromFirebase(currentUserPosts, postsContainer);
+        const allPosts = await getPosts('posts');
+        drawPostFromFirebase(allPosts, postsContainer);
         postsLogic();
       } catch (error) {
         console.log(error);
