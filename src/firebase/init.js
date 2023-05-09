@@ -24,6 +24,7 @@ import {
   doc,
   setDoc,
   updateDoc,
+  deleteDoc,
   arrayUnion,
 } from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-firestore.js';
 
@@ -54,5 +55,5 @@ export {
   doc, getDoc, setDoc, updateProfile, signInWithRedirect,
   signInWithPopup, GoogleAuthProvider, provider,
   getRedirectResult, updateDoc, arrayUnion,
-  registerFirebase,
+  registerFirebase, deleteDoc,
 };

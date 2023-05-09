@@ -1,4 +1,4 @@
-import { savePost, getPosts, updateNumberOfLikes } from '../firebase/auth.js';
+import { savePost, getPosts, deletePost, updateNumberOfLikes } from '../firebase/auth.js';
 import { auth, onAuthStateChanged } from '../firebase/init.js';
 // eslint-disable-next-line import/no-cycle
 import { onNavigate } from '../main.js';
@@ -25,7 +25,7 @@ const drawPostFromFirebase = (querySnapshot, postsContainer, userId) => {
             <p class='my-4 mx-2'>${doc.data().post}</p>
             <div class='flex place-content-end'>
               <div class='flex w-12 place-content-between ${(idUserInPost === userId) ? 'block' : 'hidden'}'>
-                <img class='w-4 cursor-pointer' src='../img/icons/basura.png' alt='icon' />
+                <img class='trashBtn w-4 cursor-pointer' src='../img/icons/basura.png' alt='icon' />
                 <img class='w-4 cursor-pointer' src='../img/icons/editar.png' alt='icon' />
               </div>
             </div>
@@ -44,10 +44,31 @@ const postsLogic = () => {
       const idPost = event.target.parentElement.parentElement.parentElement.id;
       updateNumberOfLikes(auth.currentUser.uid, idPost);
       // Dibujar los posts por primera vez
+      const userId = auth.currentUser.uid;
       const allPosts = await getPosts('posts');
       const postsContainer = document.querySelector('#postsContainer');
-      drawPostFromFirebase(allPosts, postsContainer);
+      drawPostFromFirebase(allPosts, postsContainer, userId);
       postsLogic();
+    });
+  });
+
+  // Boton eliminar post
+  const trashBtn = document.querySelectorAll('.trashBtn');
+  trashBtn.forEach((btn) => {
+    btn.addEventListener('click', async (event) => {
+      // eslint-disable-next-line no-restricted-globals
+      const result = confirm('Seguro que quieres eliminar este post?');
+      if (result) {
+        console.log(result);
+        const idPost = event.target.parentElement.parentElement.parentElement.id;
+        await deletePost(idPost);
+        // Volver a dibujar los posts
+        const userId = auth.currentUser.uid;
+        const allPosts = await getPosts('posts');
+        const postsContainer = document.querySelector('#postsContainer');
+        drawPostFromFirebase(allPosts, postsContainer, userId);
+        postsLogic();
+      }
     });
   });
 };
@@ -113,8 +134,9 @@ export const profileLogic = async () => {
         newPost.value = '';
 
         // Dibujar los post actualizados
+        const userId = auth.currentUser.uid;
         const allPosts = await getPosts('posts');
-        drawPostFromFirebase(allPosts, postsContainer);
+        drawPostFromFirebase(allPosts, postsContainer, userId);
         postsLogic();
       } catch (error) {
         console.log(error);

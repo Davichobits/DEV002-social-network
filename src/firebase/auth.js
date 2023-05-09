@@ -7,6 +7,7 @@ import {
   db, doc,
   collection, getDocs, setDoc, getDoc,
   query, where, signInWithPopup, provider, updateDoc, arrayUnion,
+  deleteDoc,
 } from './init.js';
 
 export const loginFirebase = async (email, password) => {
@@ -120,4 +121,9 @@ export const updateNumberOfLikes = async (userID, idPost) => {
     }
     
   }
+};
+
+export const deletePost = (idPost) => {
+  const postRef = doc(db, 'posts', idPost);
+  deleteDoc(postRef);
 };
