@@ -17,7 +17,7 @@ const drawPostFromFirebase = (querySnapshot, postsContainer) => {
             <div class='flex place-content-between '>
               <p class='w-20 text-gray-400 text-[10px]'>5-may-23</p>
               <div class="flex items-center w-8 place-content-between">
-                <span>${likesCounter}</span><img class='hearthBtn w-4 cursor-pointer' src='../img/icons/corazon.png' alt='icon' />
+                <span>${likesCounter}</span><img class='hearthBtn w-4 cursor-pointer' src=${(likesCounter !== 0) ? '../img/icons/corazon_rojo.png' : '../img/icons/corazon.png'} alt='icon' />
               </div>
               
             </div>
