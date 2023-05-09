@@ -91,18 +91,17 @@ export const launchGoogleRegister = () => signInWithRedirect(auth, provider);
 
 // FIREBASE
 
-export const savePost = (post, userID) => setDoc(doc(collection(db, userID)), post);
+export const savePost = (post) => setDoc(doc(collection(db, 'posts')), post);
 
 export const getPosts = (userID) => getDocs(collection(db, userID));
 
 export const updateNumberOfLikes = async (userID, idPost) => {
   // Referencia del post
-  const postRef = doc(db, userID, idPost);
+  const postRef = doc(db, 'posts', idPost);
   // Obtener el post con el id
   const docSnap = await getDoc(postRef);
   if (docSnap.exists()) {
     const postObject = docSnap.data();
-
     // Actualizar el numero de likes de ese post
     if (!postObject.likes.includes(userID)) {
       updateDoc(postRef, {
@@ -119,5 +118,6 @@ export const updateNumberOfLikes = async (userID, idPost) => {
         likes: arrayWithoutLike,
       });
     }
+    
   }
 };
