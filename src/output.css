@@ -742,8 +742,16 @@ select {
   margin-top: -11px;
 }
 
+.block {
+  display: block;
+}
+
 .flex {
   display: flex;
+}
+
+.hidden {
+  display: none;
 }
 
 .w-12 {
