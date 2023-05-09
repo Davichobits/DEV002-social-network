@@ -23,6 +23,8 @@ import {
   onSnapshot,
   doc,
   setDoc,
+  updateDoc,
+  arrayUnion,
 } from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-firestore.js';
 
 import { config } from './config.js';
@@ -51,6 +53,6 @@ export {
   collection, addDoc, getDocs, query, where, onSnapshot,
   doc, getDoc, setDoc, updateProfile, signInWithRedirect,
   signInWithPopup, GoogleAuthProvider, provider,
-  getRedirectResult,
+  getRedirectResult, updateDoc, arrayUnion,
   registerFirebase,
 };

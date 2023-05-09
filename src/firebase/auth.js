@@ -5,8 +5,8 @@ import {
   onAuthStateChanged,
   auth,
   db, doc,
-  collection, getDocs, setDoc,
-  query, where, signInWithPopup, provider,
+  collection, getDocs, setDoc, getDoc,
+  query, where, signInWithPopup, provider, updateDoc, arrayUnion,
 } from './init.js';
 
 export const loginFirebase = async (email, password) => {
@@ -94,3 +94,30 @@ export const launchGoogleRegister = () => signInWithRedirect(auth, provider);
 export const savePost = (post, userID) => setDoc(doc(collection(db, userID)), post);
 
 export const getPosts = (userID) => getDocs(collection(db, userID));
+
+export const updateNumberOfLikes = async (userID, idPost) => {
+  // Referencia del post
+  const postRef = doc(db, userID, idPost);
+  // Obtener el post con el id
+  const docSnap = await getDoc(postRef);
+  if (docSnap.exists()) {
+    const postObject = docSnap.data();
+
+    // Actualizar el numero de likes de ese post
+    if (!postObject.likes.includes(userID)) {
+      updateDoc(postRef, {
+        ...postObject,
+        likes: arrayUnion(userID),
+      });
+    } else {
+
+      // Quito el id del usuario que ya le ha dado like
+      const arrayWithoutLike = postObject.likes.filter((like) => like !== userID);
+
+      updateDoc(postRef, {
+        ...postObject,
+        likes: arrayWithoutLike,
+      });
+    }
+  }
+};

@@ -1,22 +1,21 @@
-import { savePost, getPosts } from '../firebase/auth.js';
+import { savePost, getPosts, updateNumberOfLikes } from '../firebase/auth.js';
 import { auth, onAuthStateChanged } from '../firebase/init.js';
 // eslint-disable-next-line import/no-cycle
 import { onNavigate } from '../main.js';
 // eslint-disable-next-line import/no-cycle
 
 // Dibujar post de firebase
-function drawPostFromFirebase(querySnapshot, postsContainer) {
+const drawPostFromFirebase = (querySnapshot, postsContainer) => {
   // eslint-disable-next-line no-param-reassign
   postsContainer.innerHTML = '';
-  console.log(postsContainer);
   querySnapshot.forEach((doc) => {
     // eslint-disable-next-line no-param-reassign
     // eslint-disable-next-line no-param-reassign
     postsContainer.innerHTML += `
-          <div class="border-2 rounded-lg p-2 my-4">
+          <div class="border-2 rounded-lg p-2 my-4" id="${doc.id}">
             <div class='flex place-content-between'>
               <p class='w-20 text-gray-400 text-[10px]'>5-may-23</p>
-              <img class='w-4 cursor-pointer' src='../img/icons/corazon.png' alt='icon' />
+              <img class='hearthBtn w-4 cursor-pointer' src='../img/icons/corazon.png' alt='icon' />
             </div>
             <p class='my-4 mx-2'>${doc.data().post}</p>
             <div class='flex place-content-end'>
@@ -31,6 +30,17 @@ function drawPostFromFirebase(querySnapshot, postsContainer) {
     // console.log(doc.id, " => ", doc.data());
   });
 }
+
+const postsLogic = () => {
+  //Boton de like
+  const hearthBtn = document.querySelectorAll('.hearthBtn');
+  hearthBtn.forEach((btn) => {
+    btn.addEventListener('click', (event) => {
+      const idPost = event.target.parentElement.parentElement.id;
+      updateNumberOfLikes(auth.currentUser.uid, idPost);
+    });
+  });
+};
 
 export const profileLogic = async () => {
   const newPostLabel = document.querySelector('#newPostLabel');
@@ -58,6 +68,7 @@ export const profileLogic = async () => {
       // Dibujar los posts por primera vez
       const querySnapshot = await getPosts(auth.currentUser.uid);
       drawPostFromFirebase(querySnapshot, postsContainer);
+      postsLogic();
     } else {
       // proteger ruta
       onNavigate('/');
@@ -90,8 +101,9 @@ export const profileLogic = async () => {
         newPost.value = '';
 
         // Dibujar los post actualizados
-        const querySnapshot = await getPosts(auth.currentUser.uid);
-        drawPostFromFirebase(querySnapshot, postsContainer);
+        const currentUserPosts = await getPosts(auth.currentUser.uid);
+        drawPostFromFirebase(currentUserPosts, postsContainer);
+        postsLogic();
       } catch (error) {
         console.log(error);
       }
