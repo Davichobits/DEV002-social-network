@@ -2,12 +2,17 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   auth,
-  registerFirebase,
+  signInWithPopup,
 } from '../src/firebase/init';
-import { loginFirebase } from '../src/firebase/auth.js';
+import {
+  loginFirebase,
+  registerFirebase,
+  launchGoogleLogin,
+} from '../src/firebase/auth.js';
 
 jest.mock('../src/firebase/init.js', () => ({
   auth: jest.fn(() => ({ auth: 'TEST' })),
+  provider: jest.fn(() => ({ provider: 'TEST' })),
   signInWithEmailAndPassword: jest.fn((authentication, email, password) => {
     if (!email || !password) {
       throw new Error('ERROR');
@@ -16,6 +21,12 @@ jest.mock('../src/firebase/init.js', () => ({
   }),
   createUserWithEmailAndPassword: jest.fn((authentication, email, password) => {
     if (!email || !password) {
+      throw new Error('ERROR');
+    }
+    Promise.resolve({ user: 'admin' });
+  }),
+  signInWithPopup: jest.fn((authentication, provider) => {
+    if (!provider) {
       throw new Error('ERROR');
     }
     Promise.resolve({ user: 'admin' });
@@ -48,5 +59,14 @@ describe('Test for the create user function', () => {
   it('should call createUserWithEmailAndPassword with parameters', async () => {
     await registerFirebase(email, password);
     expect(createUserWithEmailAndPassword).toHaveBeenCalledWith(auth, email, password);
+  });
+});
+
+// testing function launchGoogleLogin
+
+describe('Test for the login with google function', () => {
+  it('should call launchGoogleLogin', async () => {
+    await launchGoogleLogin();
+    expect(signInWithPopup).toHaveBeenCalled();
   });
 });

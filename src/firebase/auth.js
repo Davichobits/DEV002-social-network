@@ -17,55 +17,7 @@ export const loginFirebase = async (email, password) => {
     return error.message;
   }
 };
-
-export const stateFirebase = async () => {
-  let result = '';
-  try {
-    await onAuthStateChanged(auth, (user) => {
-      if (user) {
-        result = auth.currentUser.uid;
-      } else {
-        // console.log('usuario deslogeado');
-      }
-    });
-    return result;
-  } catch (error) {
-    throw error.message;
-  }
-};
-
-export const writeUserData = async (id, object) => {
-  try {
-    const userRef = collection(db, 'user');
-    await setDoc(doc(userRef, id), object);
-  } catch (e) {
-    // console.error('Error adding document: ', e);
-  }
-};
-
-export const readUserData = async () => {
-  try {
-    const docRef = doc(db, 'users');
-    console.log(docRef);
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const searchNameById = async (id) => {
-  const usersRef = collection(db, 'user');
-  const q = query(usersRef, where('id', '==', id));
-  const querySnapshot = await getDocs(q);
-
-  let userName;
-
-  // eslint-disable-next-line no-shadow
-  await querySnapshot.forEach((doc) => {
-    userName = doc.data().name;
-  });
-
-  return userName;
-};
+export const registerFirebase = (email, password) => createUserWithEmailAndPassword(auth, email, password);
 
 export const launchGoogleLogin = () => signInWithPopup(auth, provider);
 export const launchGoogleRegister = () => signInWithRedirect(auth, provider);
@@ -119,5 +71,3 @@ export const updatePost = async (idPost, newPost) => {
     });
   }
 };
-
-export const registerFirebase = (email, password) => createUserWithEmailAndPassword(auth, email, password);
