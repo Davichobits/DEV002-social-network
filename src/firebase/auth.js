@@ -7,7 +7,7 @@ import {
   db, doc,
   collection, getDocs, setDoc, getDoc,
   query, where, signInWithPopup, provider, updateDoc, arrayUnion,
-  deleteDoc,
+  deleteDoc, orderBy,
 } from './init.js';
 
 export const loginFirebase = async (email, password) => {
@@ -94,7 +94,7 @@ export const launchGoogleRegister = () => signInWithRedirect(auth, provider);
 
 export const savePost = (post) => setDoc(doc(collection(db, 'posts')), post);
 
-export const getPosts = (userID) => getDocs(collection(db, userID));
+export const getPosts = (userID) => getDocs(query(collection(db, userID), orderBy('timestamp', 'desc')));
 
 export const updateNumberOfLikes = async (userID, idPost) => {
   // Referencia del post

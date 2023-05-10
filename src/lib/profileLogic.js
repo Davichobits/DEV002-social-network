@@ -1,5 +1,11 @@
-import { savePost, getPosts, deletePost, updateNumberOfLikes, updatePost } from '../firebase/auth.js';
-import { auth, onAuthStateChanged } from '../firebase/init.js';
+import {
+  savePost,
+  getPosts,
+  deletePost,
+  updateNumberOfLikes,
+  updatePost,
+} from '../firebase/auth.js';
+import { auth, onAuthStateChanged, Timestamp } from '../firebase/init.js';
 // eslint-disable-next-line import/no-cycle
 import { onNavigate } from '../main.js';
 // eslint-disable-next-line import/no-cycle
@@ -9,14 +15,13 @@ const drawPostFromFirebase = (querySnapshot, postsContainer, userId) => {
   // eslint-disable-next-line no-param-reassign
   postsContainer.innerHTML = '';
   querySnapshot.forEach((doc) => {
-    // eslint-disable-next-line no-param-reassign
-    // eslint-disable-next-line no-param-reassign
     const likesCounter = doc.data().likes.length;
     const idUserInPost = doc.data().userId;
+    // eslint-disable-next-line no-param-reassign
     postsContainer.innerHTML += `
           <div class="border-2 rounded-lg p-2 my-4" id="${doc.id}">
             <div class='flex place-content-between '>
-              <p class='w-20 text-gray-400 text-[10px]'>5-may-23</p>
+              <p class='w-20 text-gray-400 text-[10px]'>${doc.data().date} ${doc.data().hour}</p>
               <div class="flex items-center w-8 place-content-between">
                 <span>${likesCounter}</span><img class='hearthBtn w-4 cursor-pointer' src=${(likesCounter !== 0) ? '../img/icons/corazon_rojo.png' : '../img/icons/corazon.png'} alt='icon' />
               </div>
@@ -30,11 +35,9 @@ const drawPostFromFirebase = (querySnapshot, postsContainer, userId) => {
               </div>
             </div>
           <div>
-        
         `;
-    // console.log(doc.id, " => ", doc.data());
   });
-}
+};
 
 const postsLogic = () => {
   // Boton de like
@@ -59,7 +62,6 @@ const postsLogic = () => {
       // eslint-disable-next-line no-restricted-globals
       const result = confirm('Seguro que quieres eliminar este post?');
       if (result) {
-        console.log(result);
         const idPost = event.target.parentElement.parentElement.parentElement.id;
         await deletePost(idPost);
         // Volver a dibujar los posts
@@ -90,6 +92,23 @@ const postsLogic = () => {
       }
     });
   });
+};
+
+const getActualDate = () => {
+  const date = new Date();
+  const day = date.getDate();
+  const month = date.getMonth();
+  const year = date.getFullYear();
+  const actualDate = `${day}-${month}-${year}`;
+  return actualDate;
+};
+
+const getActualHour = () => {
+  const date = new Date();
+  const hour = date.getHours();
+  const minutes = date.getMinutes();
+  const actualHour = `${hour}:${minutes}`;
+  return actualHour;
 };
 
 export const profileLogic = async () => {
@@ -136,11 +155,13 @@ export const profileLogic = async () => {
   postBtn.addEventListener('click', async () => {
     // Validar que no este vacio el input
     newPost.value = newPost.value.trim();
-
     const newPostObject = {
       userId: auth.currentUser.uid,
       likes: [],
       post: newPost.value,
+      date: getActualDate(),
+      hour: getActualHour(),
+      timestamp: Timestamp.fromDate(new Date()),
     };
 
     if (newPost.value === '') {
