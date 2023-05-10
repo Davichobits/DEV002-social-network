@@ -4,6 +4,7 @@ import {
   updateProfile,
   GoogleAuthProvider,
 } from '../firebase/init.js';
+import { onNavigate } from '../main.js';
 // eslint-disable-next-line import/no-cycle
 
 export const registerLogic = () => {
@@ -44,6 +45,7 @@ export const registerLogic = () => {
           displayName: nameUser,
           photoURL: '../img/perfil.png',
         });
+        onNavigate('/success');
       }
     } else {
       errorDiv.innerText = 'Las contraseñas no coinciden';
