@@ -7,4 +7,7 @@ module.exports = {
   plugins: [
     require('@tailwindcss/forms'),
   ],
+  extends: [
+    'plugin:tailwindcss/config',
+  ],
 };

@@ -1,14 +1,11 @@
-import { launchGoogleLogin, launchGoogleRegister } from '../firebase/auth.js';
+import { launchGoogleLogin } from '../firebase/auth.js';
 import {
   auth,
   updateProfile,
   registerFirebase,
   GoogleAuthProvider,
-  getRedirectResult,
 } from '../firebase/init.js';
 // eslint-disable-next-line import/no-cycle
-import { onNavigate } from '../main.js';
-import { Profile } from '../components/Profile.js';
 
 export const registerLogic = () => {
   const form = document.querySelector('#form');
@@ -20,15 +17,9 @@ export const registerLogic = () => {
 
     const credential = GoogleAuthProvider.credentialFromResult(result);
     const token = credential.accessToken;
-    const user = result.user;
 
     // Guardardo localstorage
     localStorage.setItem('token', token);
-
-    // if (user) {
-    //   onNavigate('/profile');
-    //   Profile.initialize();
-    // }
   });
 
   form.addEventListener('submit', async (event) => {

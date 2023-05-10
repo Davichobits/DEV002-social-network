@@ -5,17 +5,23 @@
     "jest/globals": true
   },
   "extends": [
-    "airbnb-base"
+    "airbnb-base",
+    "plugin:tailwindcss/recommended"
   ],
   "globals": {
     "Atomics": "readonly",
     "SharedArrayBuffer": "readonly",
     "firebase": "readonly"
   },
-  "plugins": ["jest"],
+  "plugins": ["tailwindcss", "jest"],
   "parserOptions": {
     "ecmaVersion": 2018,
     "sourceType": "module"
+  },
+  "settings": {
+    "tailwindcss": {
+      "config": "./tailwind.config.js"
+    }
   },
   "rules": {
     "linebreak-style": 0,
@@ -26,6 +32,10 @@
     "jest/no-focused-tests": "error",
     "jest/no-identical-title": "error",
     "jest/prefer-to-have-length": "warn",
-    "jest/valid-expect": "error"
+    "jest/valid-expect": "error",
+    "tailwindcss/classnames-order": "error",
+    "tailwindcss/no-custom-classname": "error",
+    "tailwindcss/no-contradicting-classname": "error",
+    "tailwindcss/no-missing-classname": "error"
   }
 }
