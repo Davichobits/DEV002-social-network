@@ -1,6 +1,6 @@
 import {
   signInWithEmailAndPassword,
-  // createUserWithEmailAndPassword,
+  createUserWithEmailAndPassword,
   signInWithRedirect,
   onAuthStateChanged,
   auth,
@@ -17,14 +17,6 @@ export const loginFirebase = async (email, password) => {
     return error.message;
   }
 };
-
-// export const registerFirebase = async (email, password) => {
-//   try {
-//     return await createUserWithEmailAndPassword(auth, email, password);
-//   } catch (error) {
-//     return error.message;
-//   }
-// };
 
 export const stateFirebase = async () => {
   let result = '';
@@ -45,12 +37,7 @@ export const stateFirebase = async () => {
 export const writeUserData = async (id, object) => {
   try {
     const userRef = collection(db, 'user');
-
     await setDoc(doc(userRef, id), object);
-
-    // const userRef = collection(db, 'users')
-    // const docRef = await addDoc(collection(db, 'users'), object);
-    // console.log("Document written with ID: ", docRef.id);
   } catch (e) {
     // console.error('Error adding document: ', e);
   }
@@ -60,13 +47,6 @@ export const readUserData = async () => {
   try {
     const docRef = doc(db, 'users');
     console.log(docRef);
-    // const docSnap = await getDoc(docRef);
-
-    // if (docSnap.exists()) {
-    //   console.log(docSnap.data());
-    // } else {
-    //   console.log("No such document!");
-    // }
   } catch (error) {
     console.error(error);
   }
@@ -139,3 +119,5 @@ export const updatePost = async (idPost, newPost) => {
     });
   }
 };
+
+export const registerFirebase = (email, password) => createUserWithEmailAndPassword(auth, email, password);

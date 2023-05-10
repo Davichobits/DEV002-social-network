@@ -1,8 +1,7 @@
-import { launchGoogleLogin } from '../firebase/auth.js';
+import { launchGoogleLogin, registerFirebase } from '../firebase/auth.js';
 import {
   auth,
   updateProfile,
-  registerFirebase,
   GoogleAuthProvider,
 } from '../firebase/init.js';
 // eslint-disable-next-line import/no-cycle

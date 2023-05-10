@@ -43,8 +43,6 @@ const auth = getAuth();
 
 const provider = new GoogleAuthProvider();
 
-// eslint-disable-next-line max-len
-const registerFirebase = (email, password) => createUserWithEmailAndPassword(auth, email, password);
 
 export {
   config,
@@ -56,6 +54,5 @@ export {
   collection, addDoc, getDocs, query, where, onSnapshot,
   doc, getDoc, setDoc, updateProfile, signInWithRedirect,
   signInWithPopup, GoogleAuthProvider, provider,
-  getRedirectResult, updateDoc, arrayUnion,
-  registerFirebase, deleteDoc, Timestamp, orderBy,
+  getRedirectResult, updateDoc, arrayUnion, deleteDoc, Timestamp, orderBy,
 };
