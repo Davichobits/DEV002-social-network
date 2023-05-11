@@ -1,14 +1,14 @@
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  signInWithRedirect,
-  onAuthStateChanged,
   auth,
   db, doc,
   collection, getDocs, setDoc, getDoc,
-  query, where, signInWithPopup, provider, updateDoc, arrayUnion,
+  query, signInWithPopup, provider, updateDoc, arrayUnion,
   deleteDoc, orderBy,
 } from './init.js';
+
+// AUTENTICACION
 
 export const loginFirebase = async (email, password) => {
   try {
@@ -18,11 +18,9 @@ export const loginFirebase = async (email, password) => {
   }
 };
 export const registerFirebase = (email, password) => createUserWithEmailAndPassword(auth, email, password);
-
 export const launchGoogleLogin = () => signInWithPopup(auth, provider);
-export const launchGoogleRegister = () => signInWithRedirect(auth, provider);
 
-// FIREBASE
+// FIRESTORE
 
 export const savePost = (post) => setDoc(doc(collection(db, 'posts')), post);
 
