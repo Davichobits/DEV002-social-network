@@ -86,7 +86,7 @@ describe('Test for the create user function', () => {
   });
 });
 
-// testing function launchGoogleLogin
+// Test de la función launchGoogleLogin
 
 describe('Test for the login with google function', () => {
   it('should call launchGoogleLogin', async () => {
@@ -95,7 +95,7 @@ describe('Test for the login with google function', () => {
   });
 });
 
-// Tets for the savePost function
+// Test de la función savePost
 
 describe('savePost', () => {
   const post = {
@@ -119,7 +119,7 @@ describe('savePost', () => {
   });
 });
 
-// Test for the getPosts function
+// Test de la función getPosts
 
 describe('getPosts', () => {
   it('should be a function', () => {
@@ -137,7 +137,7 @@ describe('getPosts', () => {
   });
 });
 
-// Tests for the updateNumberOfLikes function
+// Test de la función updateNumberOfLikes
 
 describe('updateNumberOfLikes', () => {
   it('should be a function', () => {
@@ -176,7 +176,7 @@ describe('deletePost', () => {
   });
 });
 
-// Test for the updatePost function
+// Test de la función updatePost
 
 describe('updatePost', () => {
   it('should be a function', () => {
