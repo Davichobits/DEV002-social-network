@@ -11,32 +11,39 @@ import { onNavigate } from '../main.js';
 // eslint-disable-next-line import/no-cycle
 
 // Dibujar post de firebase
-const drawPostFromFirebase = (querySnapshot, postsContainer, userId) => {
+const drawPostFromFirebase = async () => {
+  const postsContainer = document.querySelector('#postsContainer');
+  const userId = auth.currentUser.uid;
+  const querySnapshot = await getPosts('posts');
   // eslint-disable-next-line no-param-reassign
-  postsContainer.innerHTML = '';
-  querySnapshot.forEach((doc) => {
-    const likesCounter = doc.data().likes.length;
-    const idUserInPost = doc.data().userId;
-    // eslint-disable-next-line no-param-reassign
-    postsContainer.innerHTML += `
-          <div class="border-2 rounded-lg p-2 my-4" id="${doc.id}">
-            <div class='flex place-content-between '>
-              <p class='w-20 text-gray-400 text-[10px]'>${doc.data().date} ${doc.data().hour}</p>
-              <div class="flex items-center w-8 place-content-between">
-                <span>${likesCounter}</span><img class='hearthBtn w-4 cursor-pointer' src=${(likesCounter !== 0) ? '../img/icons/corazon_rojo.png' : '../img/icons/corazon.png'} alt='icon' />
+  if(postsContainer){
+    postsContainer.innerHTML = '';
+  
+    querySnapshot.forEach((doc) => {
+      const likesCounter = doc.data().likes.length;
+      const idUserInPost = doc.data().userId;
+      // eslint-disable-next-line no-param-reassign
+      postsContainer.innerHTML += `
+            <div class="border-2 rounded-lg p-2 my-4" id="${doc.id}">
+              <div class='flex place-content-between '>
+                <p class='w-20 text-gray-400 text-[10px]'>${doc.data().date} ${doc.data().hour}</p>
+                <div class="flex items-center w-8 place-content-between">
+                  <span>${likesCounter}</span><img class='hearthBtn w-4 cursor-pointer' src=${(likesCounter !== 0) ? '../img/icons/corazon_rojo.png' : '../img/icons/corazon.png'} alt='icon' />
+                </div>
+                
               </div>
-              
-            </div>
-            <p class='my-4 mx-2'>${doc.data().post}</p>
-            <div class='flex place-content-end'>
-              <div class='flex w-12 place-content-between ${(idUserInPost === userId) ? 'block' : 'hidden'}'>
-                <img class='trashBtn w-4 cursor-pointer' src='../img/icons/basura.png' alt='icon' />
-                <img class='editBtn w-4 cursor-pointer' src='../img/icons/editar.png' alt='icon' />
+              <p class='my-4 mx-2'>${doc.data().post}</p>
+              <div class='flex place-content-end'>
+                <div class='flex w-12 place-content-between ${(idUserInPost === userId) ? 'block' : 'hidden'}'>
+                  <img class='trashBtn w-4 cursor-pointer' src='../img/icons/basura.png' alt='icon' />
+                  <img class='editBtn w-4 cursor-pointer' src='../img/icons/editar.png' alt='icon' />
+                </div>
               </div>
-            </div>
-          <div>
-        `;
-  });
+            <div>
+          `;
+    });
+  }
+  postsLogic();
 };
 
 const postsLogic = () => {
@@ -47,11 +54,8 @@ const postsLogic = () => {
       const idPost = event.target.parentElement.parentElement.parentElement.id;
       updateNumberOfLikes(auth.currentUser.uid, idPost);
       // Dibujar los posts por primera vez
-      const userId = auth.currentUser.uid;
-      const allPosts = await getPosts('posts');
-      const postsContainer = document.querySelector('#postsContainer');
-      drawPostFromFirebase(allPosts, postsContainer, userId);
-      postsLogic();
+      drawPostFromFirebase();
+      
     });
   });
 
@@ -65,11 +69,7 @@ const postsLogic = () => {
         const idPost = event.target.parentElement.parentElement.parentElement.id;
         await deletePost(idPost);
         // Volver a dibujar los posts
-        const userId = auth.currentUser.uid;
-        const allPosts = await getPosts('posts');
-        const postsContainer = document.querySelector('#postsContainer');
-        drawPostFromFirebase(allPosts, postsContainer, userId);
-        postsLogic();
+        drawPostFromFirebase();
       }
     });
   });
@@ -84,11 +84,7 @@ const postsLogic = () => {
       if (newPost !== null) {
         await updatePost(idPost, newPost);
         // Volver a dibujar los posts
-        const userId = auth.currentUser.uid;
-        const allPosts = await getPosts('posts');
-        const postsContainer = document.querySelector('#postsContainer');
-        drawPostFromFirebase(allPosts, postsContainer, userId);
-        postsLogic();
+        drawPostFromFirebase();
       }
     });
   });
@@ -117,7 +113,6 @@ export const profileLogic = async () => {
   const closeSesion = document.querySelector('#closeSesion');
   const postBtn = document.querySelector('#postBtn');
   const newPost = document.querySelector('#newPost');
-  const postsContainer = document.querySelector('#postsContainer');
 
   // Observador
   onAuthStateChanged(auth, async (user) => {
@@ -128,17 +123,13 @@ export const profileLogic = async () => {
         newPostLabel.innerText = 'En que estás pensando hoy?';
       }
       if (user.photoURL) {
+        console.log(user.photoURL)
         profileImg.src = user.photoURL;
-        // localStorage.setItem('photoURL', user.photoURL);
       } else {
         profileImg.src = '../img/perfil.png';
-        localStorage.setItem('photoURL', '../img/perfil.png');
       }
       // Dibujar los posts por primera vez
-      const userId = auth.currentUser.uid;
-      const allPosts = await getPosts('posts');
-      drawPostFromFirebase(allPosts, postsContainer, userId);
-      postsLogic();
+      drawPostFromFirebase();
     } else {
       // proteger ruta
       onNavigate('/');
@@ -174,10 +165,7 @@ export const profileLogic = async () => {
         newPost.value = '';
 
         // Dibujar los post actualizados
-        const userId = auth.currentUser.uid;
-        const allPosts = await getPosts('posts');
-        drawPostFromFirebase(allPosts, postsContainer, userId);
-        postsLogic();
+        drawPostFromFirebase();
       } catch (error) {
         console.log(error);
       }

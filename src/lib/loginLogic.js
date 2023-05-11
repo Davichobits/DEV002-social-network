@@ -24,8 +24,6 @@ export const loginLogic = () => {
     } else if (result === 'Firebase: Error (auth/user-not-found).') {
       errorDiv.innerText = 'Usuario no encontrado';
     } else {
-      // let userId = result.user.uid;
-      // readUserData();
       onNavigate('/profile');
     }
   });
